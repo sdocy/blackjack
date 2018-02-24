@@ -84,13 +84,11 @@ public class blackjack : MonoBehaviour {
     // time (cnt * cashTextDelay) independent of the
     // amount being added or subtracted.
     /*
-    IEnumerator update_playerWinsText(int num)
-    {
+    IEnumerator update_playerWinsText(int num) {
         int i, tmp, cnt;
 
         cnt = Mathf.Min(Mathf.Abs(num), cashTextIters);
-        for (i = 0; i < cnt; i++)
-        {
+        for (i = 0; i < cnt; i++) {
             tmp = int.Parse(playerNumWinsText.text);
             tmp += (num / cnt);
             playerNumWinsText.text = tmp.ToString();
@@ -104,31 +102,25 @@ public class blackjack : MonoBehaviour {
     // see if player or dealer has been dealt blackjack
     //
     // Keep in sync with checkForBJSim()
-    bool checkForBJ()
-    {
-        if ((playerTotal[currLine] == twenty_one) || ((dealerTotal + dealerHoleCard.value) == twenty_one))
-        {
+    bool checkForBJ() {
+        if ((playerTotal[currLine] == twenty_one) || ((dealerTotal + dealerHoleCard.value) == twenty_one)) {
             revealHoleCard();
             StartCoroutine(seeWhoWins(true));
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
 
     // Keep in sync with checkForBJ()
-    bool checkForBJSim()
-    {
-        if ((playerTotal[currLine] == twenty_one) || ((dealerTotal + dealerHoleCard.value) == twenty_one))
-        {
+    bool checkForBJSim() {
+        if ((playerTotal[currLine] == twenty_one) || ((dealerTotal + dealerHoleCard.value) == twenty_one)) {
             revealHoleCard();
             seeWhoWinsSim(true);                    // use sim version of seeWhoWins()
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -136,29 +128,23 @@ public class blackjack : MonoBehaviour {
     // We have over 21, see if we have an ace we can change from 11 to 1.
     // Handles special case, player has an ace, has 21, hits and gets another
     // aced, now has 32, demoting an ace still leaves 22, need to demote the other ace
-    void checkForAceToLowerPlayer()
-    {
-        if (numPlayerAces[currLine] > 0)
-        {
+    void checkForAceToLowerPlayer() {
+        if (numPlayerAces[currLine] > 0) {
             numPlayerAces[currLine]--;
             playerTotal[currLine] = playerTotal[currLine] - 10;
             playerTotalText[currLine].text = playerTotal[currLine].ToString();
-            if (playerTotal[currLine] > twenty_one)
-            {
+            if (playerTotal[currLine] > twenty_one) {
                 checkForAceToLowerPlayer();
             }
         }
     }
 
-    void checkForAceToLowerDealer()
-    {
-        if (numDealerAces > 0)
-        {
+    void checkForAceToLowerDealer() {
+        if (numDealerAces > 0) {
             numDealerAces--;
             dealerTotal = dealerTotal - 10;
             dealerTotalText.text = dealerTotal.ToString();
-            if (dealerTotal > twenty_one)
-            {
+            if (dealerTotal > twenty_one) {
                 checkForAceToLowerDealer();
             }
         }
@@ -168,8 +154,7 @@ public class blackjack : MonoBehaviour {
     // as soon as the player busts since we already know this line
     // is a loss, unlike non-busted lines which must wait until
     // after dealer's turn to see who wins.
-    void busted()
-    {
+    void busted() {
         winOrLoseText[currLine].text = "BUSTED !!";
         winOrLoseText[currLine].CrossFadeAlpha(1.0f, 1.0f, false);
         cardLinesBusted++;
@@ -181,8 +166,7 @@ public class blackjack : MonoBehaviour {
 
     // Push....player and dealer have the same amount, give the player
     // his bet back.
-    void tie(int line)
-    {
+    void tie(int line) {
         winOrLoseText[line].text = "PUSH...";
         winOrLoseText[line].CrossFadeAlpha(1.0f, 1.0f, false);
 
@@ -190,8 +174,7 @@ public class blackjack : MonoBehaviour {
     }
 
     // dealer's total is greater than player total
-    void dealerWins(int line)
-    {
+    void dealerWins(int line) {
         winOrLoseText[line].text = "YOU LOSE !!";
         winOrLoseText[line].CrossFadeAlpha(1.0f, 1.0f, false);
         playerNumLives--;
@@ -199,17 +182,14 @@ public class blackjack : MonoBehaviour {
     }
 
     // player had won, return his initial bet and his winnings to him
-    void playerWins(bool blackjack, int line)
-    {
-        if (blackjack)
-        {
+    void playerWins(bool blackjack, int line) {
+        if (blackjack) {
             winOrLoseText[line].text = "BLACKJACK !!";
             winOrLoseText[line].CrossFadeAlpha(1.0f, 1.0f, false);
             houseNumLives -= 2;
             houseNumLivesText.text = houseNumLives.ToString();
         }
-        else
-        {
+        else {
             winOrLoseText[line].text = "YOU WIN !!";
             winOrLoseText[line].CrossFadeAlpha(1.0f, 1.0f, false);
             houseNumLives -= 1 + doubleDownBet[line];
@@ -222,36 +202,29 @@ public class blackjack : MonoBehaviour {
     // blackjack is hit (blackjack = true).
     //
     // Keep in sync with seeWhoWinsSim()
-    IEnumerator seeWhoWins(bool blackjack)
-    {
+    IEnumerator seeWhoWins(bool blackjack) {
         disableAll();
 
-        for (int i = 0; i <= currLine; i++)
-        {
-            if (playerTotal[i] > twenty_one)
-            {
+        for (int i = 0; i <= currLine; i++) {
+            if (playerTotal[i] > twenty_one) {
                 // player previsouly busted on this line, it's already been handled
                 continue;
             }
 
             yield return new WaitForSeconds(resultsDelay);
 
-            if (playerTotal[i] > dealerTotal)
-            {
+            if (playerTotal[i] > dealerTotal) {
                 playerWins(blackjack, i);
             }
-            else if (dealerTotal > playerTotal[i])
-            {
+            else if (dealerTotal > playerTotal[i]) {
                 dealerWins(i);
             }
-            else
-            {
+            else {
                 tie(i);
             }
         }
 
-        if ((playerNumLives == 0) || (houseNumLives ==- 0))
-        {
+        if ((playerNumLives == 0) || (houseNumLives ==- 0)) {
             globals.playerScore = playerNumLives - houseNumLives;
             yield return new WaitForSeconds(resultsDelay * 2);
             SceneManager.LoadScene("win");
@@ -261,34 +234,27 @@ public class blackjack : MonoBehaviour {
     }
 
     // Keep in sync with seeWhoWins()
-    void seeWhoWinsSim(bool blackjack)
-    {
+    void seeWhoWinsSim(bool blackjack) {
         disableAll();
 
-        for (int i = 0; i <= currLine; i++)
-        {
-            if (playerTotal[i] > twenty_one)
-            {
+        for (int i = 0; i <= currLine; i++) {
+            if (playerTotal[i] > twenty_one) {
                 // player previsouly busted on this line, it's already been handled
                 continue;
             }
 
-            if (playerTotal[i] > dealerTotal)
-            {
+            if (playerTotal[i] > dealerTotal) {
                 playerWins(blackjack, i);
             }
-            else if (dealerTotal > playerTotal[i])
-            {
+            else if (dealerTotal > playerTotal[i]) {
                 dealerWins(i);
             }
-            else
-            {
+            else {
                 tie(i);
             }
         }
 
-        if ((playerNumLives == 0) || (houseNumLives == -0))
-        {
+        if ((playerNumLives == 0) || (houseNumLives == -0)) {
             globals.playerScore = playerNumLives - houseNumLives;
             SceneManager.LoadScene("win");
         }
@@ -303,31 +269,26 @@ public class blackjack : MonoBehaviour {
     // counted as 11.
     //
     // Keep in sync with doDealersTurnSim()
-    IEnumerator doDealersTurn()
-    {
+    IEnumerator doDealersTurn() {
         currLineTagText[currLine].text = "";
 
         yield return new WaitForSeconds(dealerTurnDelay);
         revealHoleCard();
 
-        if (dealerTotal > twenty_one)
-        {
+        if (dealerTotal > twenty_one) {
             // must have been dealt two aces
             checkForAceToLowerDealer();
         }
 
         // dealer plays if player has non-busted lines
-        if (cardLinesDone > cardLinesBusted)
-        {
+        if (cardLinesDone > cardLinesBusted) {
             // dealer hits on soft 17
-            while ((dealerTotal < 17) || ((dealerTotal == 17) && (numDealerAces > 0)))
-            {
+            while ((dealerTotal < 17) || ((dealerTotal == 17) && (numDealerAces > 0))) {
                 yield return new WaitForSeconds(dealDelay);
                 dealCardToDealer();
             }
 
-            if (dealerTotal > twenty_one)
-            {
+            if (dealerTotal > twenty_one) {
                 // we don't update Text, just internal value
                 // set to -1 so playerTotal will be greater then dealerTotal
                 dealerTotal = -1;
@@ -338,27 +299,22 @@ public class blackjack : MonoBehaviour {
     }
 
     // Keep in sync with doDealersTurn()
-    void doDealersTurnSim()
-    {
+    void doDealersTurnSim() {
         revealHoleCard();
 
-        if (dealerTotal > twenty_one)
-        {
+        if (dealerTotal > twenty_one) {
             // must have been dealt two aces
             checkForAceToLowerDealer();
         }
 
         // dealer plays if player has non-busted lines
-        if (cardLinesDone > cardLinesBusted)
-        {
+        if (cardLinesDone > cardLinesBusted) {
             // dealer hits on soft 17
-            while ((dealerTotal < 17) || ((dealerTotal == 17) && (numDealerAces > 0)))
-            {
+            while ((dealerTotal < 17) || ((dealerTotal == 17) && (numDealerAces > 0))) {
                 dealCardToDealer();
             }
 
-            if (dealerTotal > twenty_one)
-            {
+            if (dealerTotal > twenty_one) {
                 // we don't update Text, just internal value
                 // set to -1 so playerTotal will be greater then dealerTotal
                 dealerTotal = -1;
@@ -369,18 +325,15 @@ public class blackjack : MonoBehaviour {
     }
 
     // wrapper for doDealersTurn coroutine
-    void dealersTurn()
-    {
+    void dealersTurn() {
         Debug.Log("Dealer's Turn...");
         StartCoroutine(doDealersTurn());
     }
 
     // Show the hole card that was dealt to the dealer
     // and add its value to the dealer total.
-    void revealHoleCard()
-    {
-        if (soundOn)
-        {
+    void revealHoleCard() {
+        if (soundOn) {
             audioSource.clip = placeCardAudioClip;
             audioSource.Play();
         }
@@ -393,27 +346,23 @@ public class blackjack : MonoBehaviour {
 
         numDealerCards++;
 
-        if (dealerHoleCard.rank == card_rank.ace)
-        {
+        if (dealerHoleCard.rank == card_rank.ace) {
             numDealerAces++;
         }
     }
 
     // Deal next card in the deck to the dealer without
     // showing it, keep it hidden until dealer's turn.
-    void dealHoleCardToDealer()
-    {
+    void dealHoleCardToDealer() {
         dealerHoleCard = Deck.getNextCard();
     }
 
     // Deal next card to the dealer, updating display
     // and adding card value to dealer total.
-    void dealCardToDealer()
-    {
+    void dealCardToDealer() {
         card_t card;
 
-        if (soundOn)
-        {
+        if (soundOn) {
             audioSource.clip = placeCardAudioClip;
             audioSource.Play();
         }
@@ -428,13 +377,11 @@ public class blackjack : MonoBehaviour {
 
         numDealerCards++;
 
-        if (card.rank == card_rank.ace)
-        {
+        if (card.rank == card_rank.ace) {
             numDealerAces++;
         }
 
-        if (dealerTotal > twenty_one)
-        {
+        if (dealerTotal > twenty_one) {
             // must have been dealt two aces
             checkForAceToLowerDealer();
         }
@@ -442,8 +389,7 @@ public class blackjack : MonoBehaviour {
 
     // Used when splitting cards to remove the split card from
     // the current line after adding it to the next line.
-    void removeSecondPlayerCard(card_t card, int line)
-    {
+    void removeSecondPlayerCard(card_t card, int line) {
         playerTotal[line] -= card.value;
         playerTotalText[line].text = playerTotal[line].ToString();
         playerCardPos[line]--;
@@ -451,8 +397,7 @@ public class blackjack : MonoBehaviour {
 
         numPlayerCards[line]--;
 
-        if (card.rank == card_rank.ace)
-        {
+        if (card.rank == card_rank.ace) {
             // we only call this when splitting doubles, so first card is also an ace
             // return it to its initial value
             playerTotal[line] += 10;
@@ -464,10 +409,8 @@ public class blackjack : MonoBehaviour {
 
     // Called when the player is dealt a card and when a card
     // is moved to the next line after splitting.
-    void placePlayerCard(card_t card, int line)
-    {
-        if (soundOn)
-        {
+    void placePlayerCard(card_t card, int line) {
+        if (soundOn) {
             audioSource.clip = placeCardAudioClip;
             audioSource.Play();
         }
@@ -480,34 +423,29 @@ public class blackjack : MonoBehaviour {
 
         numPlayerCards[line]++;
 
-        if (card.rank == card_rank.ace)
-        {
+        if (card.rank == card_rank.ace) {
             numPlayerAces[line]++;
         }
 
         // save rank of first and second card dealt to player to check for split opportunity
-        if (!hasFirstCard[line])
-        {
+        if (!hasFirstCard[line]) {
             firstCard[line] = card;
             hasFirstCard[line] = true;
         }
-        else if (!hasSecondCard[line])
-        {
+        else if (!hasSecondCard[line]) {
             secondCard[line] = card;
             hasSecondCard[line] = true;
         }
     }
 
     // get next card from the deck and deal it to the player
-    void dealCardToPlayer()
-    {
+    void dealCardToPlayer() {
         card_t card;
 
         card = Deck.getNextCard();
         placePlayerCard(card, currLine);
 
-        if (playerTotal[currLine] > twenty_one)
-        {
+        if (playerTotal[currLine] > twenty_one) {
             // must have been dealt two aces
             checkForAceToLowerPlayer();
         }
@@ -518,10 +456,8 @@ public class blackjack : MonoBehaviour {
     // and enable apporpriate buttons.
     //
     // Keep in sync with doDealSim()
-    IEnumerator doDeal()
-    {
-        if (soundOn)
-        {
+    IEnumerator doDeal() {
+        if (soundOn) {
             audioSource.clip = shuffleAudioClip;
             audioSource.Play();
         }
@@ -544,17 +480,14 @@ public class blackjack : MonoBehaviour {
         dealHoleCardToDealer();
 
         // anyone get dealt blackjack?
-        if (!checkForBJ())
-        {
+        if (!checkForBJ()) {
             enableHitStand();
 
-            if (firstCard[currLine].rank == secondCard[currLine].rank)
-            {
+            if (firstCard[currLine].rank == secondCard[currLine].rank) {
                 enableSplit();
             }
 
-            if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11))
-            {
+            if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11)) {
                 enableDoubleDown();
             }
         }
@@ -563,8 +496,7 @@ public class blackjack : MonoBehaviour {
     // Keep in sync with doDeal()
     //
     // Returns true if BJ was dealt
-    bool doDealSim()
-    {
+    bool doDealSim() {
         Deck.shuffleDeck();
         dealCardToPlayer();
         dealCardToDealer();
@@ -572,24 +504,20 @@ public class blackjack : MonoBehaviour {
         dealHoleCardToDealer();
 
         // anyone get dealt blackjack?
-        if (!checkForBJSim())                                   // using sim version of checkForBJ()
-        {
+        if (!checkForBJSim()) {                                   // using sim version of checkForBJ()
             enableHitStand();
 
-            if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11))
-            {
+            if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11)) {
                 enableDoubleDown();
             }
             return false;
-        } else
-        {
+        } else {
             return true;
         }
     }
 
     // player clicked 'DEAL', start a new round of blackjack
-    public void Deal()
-    {
+    public void Deal() {
         disableAll();
         init();
 
@@ -599,8 +527,7 @@ public class blackjack : MonoBehaviour {
     // player clicked 'STAND', mark this line as complete
     //
     // simHands() will call this directly, don't change to coroutine
-    public void Stand()
-    {
+    public void Stand() {
         disableAll();
         cardLinesDone++;
         lineCompleted = true;
@@ -609,15 +536,13 @@ public class blackjack : MonoBehaviour {
     // player clicked 'HIT' , deal him another card
     //
     // Keep in sync with HitSim()
-    public void Hit()
-    {
+    public void Hit() {
         disableDoubleDown();
         disableSplit();
 
         dealCardToPlayer();
 
-        if (playerTotal[currLine] > twenty_one)
-        {
+        if (playerTotal[currLine] > twenty_one) {
             disableHitStand();
             busted();
         }
@@ -626,28 +551,24 @@ public class blackjack : MonoBehaviour {
     // returns false to sim if player busts, true otherwise
     //
     // keep in sync with Hit()
-    public bool HitSim()
-    {
+    public bool HitSim() {
         disableDoubleDown();
         disableSplit();
 
         dealCardToPlayer();
 
-        if (playerTotal[currLine] > twenty_one)
-        {
+        if (playerTotal[currLine] > twenty_one) {
             disableHitStand();
             busted();
             return false;
-        } else
-        {
+        } else {
             return true;
         }
     }
 
     // Player clicked 'DOUBLE DOWN', deal him one card
     // and mark this line complete.
-    public void doubleDown()
-    {
+    public void doubleDown() {
         disableAll();
         doubledDownText[currLine].text = "x2";
         doubleDownBet[currLine] = 1;
@@ -659,21 +580,18 @@ public class blackjack : MonoBehaviour {
 
     // Finish a line that was started by the player splitting,
     // deal second card to player and enable appropriate buttons.
-    void handleSplits()
-    {
+    void handleSplits() {
         currLineTagText[currLine].text = "";
         currLine++;
         currLineTagText[currLine].text = "@";
 
         dealCardToPlayer();
 
-        if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11))
-        {
+        if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11)) {
             enableDoubleDown();
         }
 
-        if (firstCard[currLine].rank == secondCard[currLine].rank)
-        {
+        if (firstCard[currLine].rank == secondCard[currLine].rank) {
             enableSplit();
         }
 
@@ -684,8 +602,7 @@ public class blackjack : MonoBehaviour {
     // this line to the first slot of the next available line,
     // deal another card to the current line, and enable
     // appropriate buttons.
-    IEnumerator doSplit()
-    {
+    IEnumerator doSplit() {
         numSplits++;
 
         placePlayerCard(secondCard[currLine], numSplits);
@@ -696,35 +613,29 @@ public class blackjack : MonoBehaviour {
 
         enableHitStand();
 
-        if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11))
-        {
+        if ((playerTotal[currLine] == 9) || (playerTotal[currLine] == 10) || (playerTotal[currLine] == 11)) {
             enableDoubleDown();
         }
 
-        if (firstCard[currLine].rank == secondCard[currLine].rank)
-        {
+        if (firstCard[currLine].rank == secondCard[currLine].rank) {
             enableSplit();
         }
     }
 
     // player clicked "SPLIT"
-    public void split()
-    {
+    public void split() {
         disableAll();
 
         StartCoroutine(doSplit());
     }
 
-    public void setSFX(bool sfx)
-    {
+    public void setSFX(bool sfx) {
         soundOn = sfx;
     }
 
     // reset things for a new deal
-    void init()
-    {
-        for (int i = 0; i < numCardLines; i++)
-        {
+    void init() {
+        for (int i = 0; i < numCardLines; i++) {
             playerTotal[i]              = 0;
             playerTotalText[i].text     = "";
             hasFirstCard[i]             = false;
@@ -749,36 +660,29 @@ public class blackjack : MonoBehaviour {
         dealersTurnInProgress   = false;
         lineCompleted           = false;
 
-        for (int i = 0; i < numCardLines; i++)
-        {
+        for (int i = 0; i < numCardLines; i++) {
             winOrLoseText[i].CrossFadeAlpha(0.0f, 0.5f, false);
         }
 
-        foreach (Image I in playerCards)
-        {
+        foreach (Image I in playerCards) {
             I.sprite = Resources.Load<Sprite>("card_images/black_card");
         }
-        foreach (Image I in splitCards1)
-        {
+        foreach (Image I in splitCards1) {
             I.sprite = Resources.Load<Sprite>("card_images/black_card");
         }
-        foreach (Image I in splitCards2)
-        {
+        foreach (Image I in splitCards2) {
             I.sprite = Resources.Load<Sprite>("card_images/black_card");
         }
-        foreach (Image I in splitCards3)
-        {
+        foreach (Image I in splitCards3) {
             I.sprite = Resources.Load<Sprite>("card_images/black_card");
         }
-        foreach (Image I in dealerCards)
-        {
+        foreach (Image I in dealerCards) {
             I.sprite = Resources.Load<Sprite>("card_images/black_card");
         }
     }
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         Deck = new deckofcards();
 
         levelText.text = globals.currentLevel.ToString();
@@ -788,6 +692,7 @@ public class blackjack : MonoBehaviour {
         disableDoubleDown();
         disableSplit();
         init();
+
         playerNumLives = globals.numLivesStart;
         playerNumLivesText.text = playerNumLives.ToString();
         houseNumLives = globals.numLivesStart;
@@ -799,27 +704,22 @@ public class blackjack : MonoBehaviour {
         cardLine[3] = splitCards3;
     }
 
-    void Update()
-    {
-        if (simulating)
-        {
+    void Update() {
+        if (simulating) {
             // we are in simulation mode, dealer's turn will get triggered
             // by sim code
             return;
         }
 
-        if ((cardLinesDone == numSplits + 1) && (!dealersTurnInProgress))
-        {
+        if ((cardLinesDone == numSplits + 1) && (!dealersTurnInProgress)) {
             dealersTurnInProgress = true;
             dealersTurn();
         }
 
-        if (lineCompleted)
-        {
+        if (lineCompleted) {
             // completed a line, are there more to be processed?
             lineCompleted = false;
-            if (cardLinesDone < numSplits + 1)
-            {
+            if (cardLinesDone < numSplits + 1) {
                 handleSplits();
             }
         }
@@ -827,88 +727,73 @@ public class blackjack : MonoBehaviour {
 
     // enable / disable UI buttons
 
-    void enableDeal()
-    {
+    void enableDeal() {
         dealFlare.enableBurst();
         dealButtonText.gameObject.SetActive(true);
     }
 
-    void disableDeal()
-    {
+    void disableDeal() {
         dealFlare.cancelBurst();
         dealButtonText.gameObject.SetActive(false);
     }
 
-    void enableHitStand()
-    {
+    void enableHitStand() {
         hitStandFlare.enableBurst();
         hitButtonText.gameObject.SetActive(true);
         standButtonText.gameObject.SetActive(true);
     }
 
-    void disableHitStand()
-    {
+    void disableHitStand() {
         hitStandFlare.cancelBurst();
         hitButtonText.gameObject.SetActive(false);
         standButtonText.gameObject.SetActive(false);
     }
 
-    void enableDoubleDown()
-    {
+    void enableDoubleDown() {
         doubleDownFlare.enableBurst();
         doubleDownButtonText.gameObject.SetActive(true);
     }
 
-    void disableDoubleDown()
-    {
+    void disableDoubleDown() {
         doubleDownFlare.cancelBurst();
         doubleDownButtonText.gameObject.SetActive(false);
     }
 
-    void enableSplit()
-    {
+    void enableSplit() {
         splitFlare.enableBurst();
         splitButtonText.gameObject.SetActive(true);
     }
 
-    void disableSplit()
-    {
+    void disableSplit() {
         splitFlare.cancelBurst();
         splitButtonText.gameObject.SetActive(false);
     }
 
-    void disableAll()
-    {
+    void disableAll() {
         disableDeal();
         disableHitStand();
         disableDoubleDown();
         disableSplit();
     }
 
-    IEnumerator simHands()
-    {
-        while (true)
-        {
+    IEnumerator simHands() {
+        while (true) {
             bool simplayerStandsOrBusted;
 
             Debug.Log("Dealing...");
             init();                                     // from Deal()
-            if (!doDealSim())
-            {
+            if (!doDealSim()) {
                 // BJ was not dealt
 
                 simplayerStandsOrBusted = false;
-                while (!simplayerStandsOrBusted)
-                {
+                while (!simplayerStandsOrBusted) {
                     Debug.Log("player(" + playerTotal[0] + ") dealer(" + dealerTotal + ")");
 
-                    if (playerTotal[0] < 12)
-                    {
+                    if (playerTotal[0] < 12) {
                         Debug.Log("Hitting...");
                         // can't bust here
                         HitSim();
-                    } else if ((dealerTotal > 6) && (playerTotal[0] < 17))
-                    {
+                    } else if ((dealerTotal > 6) && (playerTotal[0] < 17)) {
                         Debug.Log("Hitting...");
                         if (!HitSim())
                         {
@@ -917,17 +802,14 @@ public class blackjack : MonoBehaviour {
                             simplayerStandsOrBusted = true;
                         }
                     }
-                    else if ((playerTotal[0] == 12) && (dealerTotal < 4))
-                    {
+                    else if ((playerTotal[0] == 12) && (dealerTotal < 4)) {
                         Debug.Log("Hitting...");
-                        if (!HitSim())
-                        {
+                        if (!HitSim()) {
                             // busted
                             Debug.Log("Busted");
                             simplayerStandsOrBusted = true;
                         }
-                    } else
-                    {
+                    } else {
                         Debug.Log("Standing...");
                         Stand();
                         simplayerStandsOrBusted = true;
@@ -942,8 +824,7 @@ public class blackjack : MonoBehaviour {
         }
     }
 
-    public void simulate()
-    {
+    public void simulate() {
         const int simLifeMult = 50;
 
         Debug.Log("Simulating...");
@@ -951,7 +832,7 @@ public class blackjack : MonoBehaviour {
         simulating = true;
         soundOn = false;
 
-        // multiply number of lives when simulationg so we get longewr, more statisdtical reults
+        // multiply number of lives when simulationg so we get longer, more statisdtical reults
         playerNumLives *= simLifeMult;
         playerNumLivesText.text = playerNumLives.ToString();
         houseNumLives *= simLifeMult;

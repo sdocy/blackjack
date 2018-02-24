@@ -12,9 +12,4 @@ public class globals : MonoBehaviour {
 	void Start () {
         currentLevel = 1;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

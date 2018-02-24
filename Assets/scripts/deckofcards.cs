@@ -7,17 +7,14 @@ using UnityEngine;
 public enum card_suit { clubs, diamonds, hearts, spades };
 public enum card_rank { two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace };
 
-public class card_t
-{
+public class card_t {
     public card_suit suit;
     public card_rank rank;
     public int value;
     public Sprite pic;
 
-    private int getCardValue(card_rank rank)
-    {
-        switch (rank)
-        {
+    private int getCardValue(card_rank rank) {
+        switch (rank) {
             case card_rank.two: return 2;
             case card_rank.three: return 3;
             case card_rank.four: return 4;
@@ -36,8 +33,7 @@ public class card_t
         return -1;
     }
 
-    public card_t(card_suit in_suit, card_rank in_rank)
-    {
+    public card_t(card_suit in_suit, card_rank in_rank) {
         string card_pic;
         suit = in_suit;
         rank = in_rank;
@@ -56,8 +52,7 @@ public class deckofcards {
     public int top_card;        // array position of next card
     public card_t[] cards = new card_t[TOTAL_CARDS];
 
-    public deckofcards()
-    {
+    public deckofcards() {
         int card = 0;
 
         foreach (card_suit suit in Enum.GetValues(typeof(card_suit)))
@@ -73,8 +68,7 @@ public class deckofcards {
         top_card = 0;
     }
 
-    private void swapCards(card_t card1, card_t card2)
-    {
+    private void swapCards(card_t card1, card_t card2) {
         card_suit temp_suit;
         card_rank temp_rank;
         int temp_val;
@@ -96,14 +90,12 @@ public class deckofcards {
         card2.pic = temp_pic;
     }
 
-    public void shuffleDeck()
-    {
+    public void shuffleDeck() {
         int i;
 
         //Debug.Log("shuffling deck");
 
-        foreach (card_t card in cards)
-        {
+        foreach (card_t card in cards) {
             i = UnityEngine.Random.Range(0, 52);
             swapCards(card, cards[i]);
         }
@@ -123,8 +115,7 @@ public class deckofcards {
     }
 
     // currently assuming this can't fail
-    public card_t getNextCard()
-    {
+    public card_t getNextCard() {
         card_t c;
 
         // if (remaining_cards == 0) return error;
@@ -136,12 +127,10 @@ public class deckofcards {
         return c;
     }
 
-    public void printCard(card_t card)
-    {
+    public void printCard(card_t card) {
         string card_code = "";
 
-        switch (card.rank)
-        {
+        switch (card.rank) {
             case card_rank.two: card_code +=    "2"; break;
             case card_rank.three: card_code +=  "3"; break;
             case card_rank.four: card_code +=   "4"; break;
@@ -157,8 +146,7 @@ public class deckofcards {
             case card_rank.ace: card_code +=    "A"; break;
         }
 
-        switch (card.suit)
-        {
+        switch (card.suit) {
             case card_suit.clubs: card_code +=      "C"; break;
             case card_suit.diamonds: card_code +=   "D"; break;
             case card_suit.hearts: card_code +=     "H"; break;
@@ -168,10 +156,8 @@ public class deckofcards {
         Debug.Log(card_code + " " + card.pic.name);
     }
 
-    public void printDeck()
-    {
-        foreach (card_t card in cards)
-        {
+    public void printDeck() {
+        foreach (card_t card in cards) {
             printCard(card);
         }
     }
