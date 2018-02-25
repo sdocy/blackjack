@@ -3,7 +3,7 @@
 	    color: white;
 	}
 
-    .side-text {
+    .indent {
 	    margin-left: 20px;
 	}
 	
@@ -15,24 +15,33 @@
 	    width: 500px;
 	}
 	
-	.center {
-	    text-align: center;
+	a:link {
+		color: #00ff00;
 	}
 	
-	.white-text {
-		color: white;
+	a:visited {
+		color: #99cc00;
+	}
+	
+	a:hover {
+		color: #80ff80;
 	}
 </style>
 		
 <body bgcolor="#004d00">
 
-<div class="center">
+<div align="center">
 		<img class="small-image" src="blackjack2.png">
 </div>
 
 
 <div style="display:inline-block;vertical-align:top;">
-	<p class="side-text">
+	<p align="center">
+		Check out the code at the project repo<br/>
+		<a class="white-text" href="https://github.com/sdocy/blackjackvbn">https://github.com/sdocy/blackjack</a><br/>
+	<p/>
+
+	<p class="indent">
 	    <br/><br/><br/><br/>A full featured BlackJack game that started as a chapter exercise on learncpp.com.  I was amazed at how simple it was to<br/>
 		capture the most basic rules of BlackJack, so I decided to implement a graphical version in Unity.  My C++ code transferred<br/>
 		over to Unity and C# very easily and I implemented the rules that had not been part of the exercise on learncpp.com, getting<br/>
@@ -59,7 +68,7 @@
     <video width="640" controls preload >
         <source src="play.mp4">
 	</video>
-	<p class="center">Best watched full screen.</p>
+	<p>Best watched full screen.</p>
 </div>
 
 <div>
@@ -70,7 +79,7 @@
 
 
 <div style="display:inline-block;vertical-align:top;">
-	<p class="side-text">
+	<p class="indent">
 		My plans are to eventually combine this with some sort of story-driven trading card game.  Cards would impact the standard<br/>
 		BlackJack rules, such as increasing or decreasing the total at which a player busts, switching cards with the other player, etc.<br/>
 		To facilitate testing how much certain rule variations would impact a player's chances of winning, I implemented a simulation<br/>
@@ -87,7 +96,7 @@
     <video width="640" controls preload >
         <source src="sim.mp4">
 	</video>
-	<p class="center">Simulation mode.</p>
+	<p align="center">Simulation mode.</p>
 </div>
 
 <div>
