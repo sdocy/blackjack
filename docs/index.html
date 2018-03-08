@@ -1,116 +1,100 @@
-<style>
-    body {
-	    color: white;
-	}
-
-    .indent {
-	    margin-left: 20px;
-	}
-	
-    .small-image {
-	    width: 300px;
-	}
-	
-	.med-image {
-	    width: 500px;
-	}
-	
-	a:link {
-		color: #00ff00;
-	}
-	
-	a:visited {
-		color: #99cc00;
-	}
-	
-	a:hover {
-		color: #80ff80;
-	}
-</style>
+<head>
+	<title>BlackJack</title>
+	<link rel="stylesheet" type="text/css" href="myStyles.css">
+</head>
 		
+<html>		
 <body bgcolor="#004d00">
 
 <div align="center">
 		<img class="small-image" src="blackjack2.png">
 </div>
 
+<div>
+	<div class="text-left indentleft">
+		<div class="center">
+			<p>
+				Check out the code at the project repo<br/>
+				<a class="white-text" href="https://github.com/sdocy/blackjackvbn">https://github.com/sdocy/blackjack</a><br/><br/>
+			</p>
+			
+			<p>Send me feedback, questions, or ideas
+			<address>
+				<a href="mailto:sdocy@comcast.net">sdocy@comcast.net</a>
+			</address>
+			</p>
+		</div>
 
-<div style="display:inline-block;vertical-align:top;">
-
-	<div align="center">
+		<div>
+			<p>
+				<br/>A full featured BlackJack game that started as a chapter exercise on learncpp.com.  I was amazed at how simple it was to
+				capture the most basic rules of BlackJack, so I decided to implement a graphical version in Unity.  My C++ code transferred
+				over to Unity and C# very easily and I implemented the rules that had not been part of the exercise on learncpp.com, getting
+				blackjack with two cards, and aces worth either 1 or 11.<br/><br/>
+				Adding doubling down was very straight-forward, but adding splitting was quite tricky, as I knew it would be.  Instead of
+				dealing with a single hand, I had to account for multiple hands.  Even though I had accounted for this and allowed for my
+				implementation to be changed to an array-based implementation, it required some refactoring of my code to get an elegant
+				design.  And of course I had to make sure that doubling-down after splitting worked correctly<br/><br/>
+				Perhaps the trickiest part was figuring out how and where to add appropriate delays for actions like displaying dealt cards
+				on the screen.  Being able to follow the action as it unfolds instead of immediately racing to the final result made the game
+				feel much more natural and increased the suspense of whether you were going to win or not.  I had used InvokeRepeating()
+				before but not StartCoroutinue(), which is what this really called for, in able to be able to use yield to introduce delays at
+				specific points in the game.  Getting the proper mix of event-driven code and asynchronous delays was tricky, but it all came
+				together eventually.<br/>
+			</p>
+		</div>
+	</div>
+	
+	<div class="text-right center">
 		<p>
-			Check out the code at the project repo<br/>
-			<a class="white-text" href="https://github.com/sdocy/blackjackvbn">https://github.com/sdocy/blackjack</a><br/><br/>
+			Try it out at<br/>
+			<a class="white-text" href="https://sdocy.itch.io/">https://sdocy.itch.io/</a><br/><br/>
 		<p/>
 		
-		<p>Send me feedback, questions, or ideas</p>
-		<address>
-			<a href="mailto:sdocy@comcast.net">sdocy@comcast.net</a>
-		</address>
+		<video width="80%" controls preload >
+			<source src="play.mp4">
+		</video>
+		
+		<p>Best watched full screen.</p>
 	</div>
-
-	<p class="indent">
-	    <br/>A full featured BlackJack game that started as a chapter exercise on learncpp.com.  I was amazed at how simple it was to<br/>
-		capture the most basic rules of BlackJack, so I decided to implement a graphical version in Unity.  My C++ code transferred<br/>
-		over to Unity and C# very easily and I implemented the rules that had not been part of the exercise on learncpp.com, getting<br/>
-		blackjack with two cards, and aces worth either 1 or 11.<br/><br/>
-		Adding doubling down was very straight-forward, but adding splitting was quite tricky, as I knew it would be.  Instead of<br/>
-		dealing with a single hand, I had to account for multiple hands.  Even though I had accounted for this and allowed for my<br/>
-		implementation to be changed to an array-based implementation, it required some refactoring of my code to get an elegant<br/>
-		design.  And of course I had to make sure that doubling-down after splitting worked correctly<br/><br/>
-		Perhaps the trickiest part was figuring out how and where to add appropriate delays for actions like displaying dealt cards<br/>
-		on the screen.  Being able to follow the action as it unfolds instead of immediately racing to the final result made the game<br/>
-		feel much more natural and increased the suspense of whether you were going to win or not.  I had used InvokeRepeating()<br/>
-		before but not StartCoroutinue(), which is what this really called for, in able to be able to use yield to introduce delays at<br/>
-		specific points in the game.  Getting the proper mix of event-driven code and asynchronous delays was tricky, but it all came<br/>
-		together eventually.<br/><br/>
-	</p>
 </div>
 
-<div align="center" style="display:inline-block">
-	<p>
-		Try it out at<br/>
-		<a class="white-text" href="https://sdocy.itch.io/">https://sdocy.itch.io/</a><br/><br/>
-	<p/>
+<div>
+	<p><br/><br/></p>
+</div>
+
+<div>
+	<div class="text-left indentleft">
+		<p>
+			My plans are to eventually combine this with some sort of story-driven trading card game.  Cards would impact the standard
+			BlackJack rules, such as increasing or decreasing the total at which a player busts, switching cards with the other player, etc.
+			To facilitate testing how much certain rule variations would impact a player's chances of winning, I implemented a simulation
+			mode in which the computer would basically play itself, using commonly used rules for when to hit and when to stand.  The
+			simulation allows me to run though hundreds of hands quickly and automatically.  Implementing the simulator was especially
+			tricky because I had to remove the asynchronous nature of the code which contained delays.  I ended up having to duplicate
+			certain functions which triggered asynchronous code and create synchronous versions of them.  The functions are all fairly
+			simple, so it's not as bad as it sounds, but I will probably take a look at it again at some point and see if I can come up
+			with a better solution.<br/>
+		</p>
+	</div>
 	
-    <video width="640" controls preload >
-        <source src="play.mp4">
-	</video>
-	<p>Best watched full screen.</p>
+	<div class="text-right center">
+		<video width="80%" controls preload >
+			<source src="sim.mp4">
+		</video>
+		
+		<p>Simulation mode.</p>
+	</div>
 </div>
+
+
 
 <div>
-<p>
-<br/><br/><br/>
-</p>
-</div>
-
-
-<div style="display:inline-block;vertical-align:top;">
-	<p class="indent">
-		My plans are to eventually combine this with some sort of story-driven trading card game.  Cards would impact the standard<br/>
-		BlackJack rules, such as increasing or decreasing the total at which a player busts, switching cards with the other player, etc.<br/>
-		To facilitate testing how much certain rule variations would impact a player's chances of winning, I implemented a simulation<br/>
-		mode in which the computer would basically play itself, using commonly used rules for when to hit and when to stand.  The<br/>
-		simulation allows me to run though hundreds of hands quickly and automatically.  Implementing the simulator was especially<br/>
-		tricky because I had to remove the asynchronous nature of the code which contained delays.  I ended up having to duplicate<br/>
-		certain functions which triggered asynchronous code and create synchronous versions of them.  The functions are all fairly<br/>
-		simple, so it's not as bad as it sounds, but I will probably take a look at it again at some point and see if I can come up<br/>
-		with a better solution.<br/>
+	<p>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/>
 	</p>
 </div>
-
-<div style="display:inline-block;vertical-align:top;">
-    <video width="640" controls preload >
-        <source src="sim.mp4">
-	</video>
-	<p align="center">Simulation mode.</p>
-</div>
-
-<div>
-<p>
-<br/><br/><br/>
-</p>
-</div>
+</body>
+</html>
 
 
